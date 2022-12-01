@@ -1,21 +1,12 @@
 #!/usr/bin/python3
-
-# Program to display the command line arguments passed to the program
-def simp_print_args():
-    from sys import argv
-
-    argc = len(argv)
-    if argc == 1:
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) <= 1:
         print("0 arguments.")
     else:
-        if argc == 2:
-            header = "{:d} argument:".format(argc - 1)
+        if len(sys.argv) == 2:
+            print("{:d} argument:".format(len(sys.argv) - 1))
         else:
-            header = "{:d} arguments:".format(argc - 1)
-        print(header)
-        for i in range(1, argc):
-            print("{:d}: {}".format(i, argv[i]))
-
-
-if __name__ == "__main__":
-    simp_print_args()
+            print("{:d} arguments:".format(len(sys.argv) - 1))
+        for i in range(1, len(sys.argv)):
+            print("{:d}: {}".format(i, sys.argv[i]))
