@@ -1,9 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-if __name__ = "__main__":
+def easy_add():
     from add_0 import add
 
     a = 1
     b = 2
-    c = add(a, b)
-    print("{:d} + {:d} = {:d}".format(a, b, c))
+    print("{:d} + {:d} = {:d}".format(a, b, add(a, b)))
+
+
+if __name__ == "__main__":
+    easy_add()
