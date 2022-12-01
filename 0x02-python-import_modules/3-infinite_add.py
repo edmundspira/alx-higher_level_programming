@@ -1,14 +1,10 @@
 #!/usr/bin/python3
-
-# Adds all whole numbers passed as command line arguments to the program
-def simp_add_arg():
-    from sys import argv
-
-    result = 0
-    for num in argv[1:]:
-        result += int(num)
-    print(result)
-
-
+# 3-infinite_add.py
 if __name__ == "__main__":
-    simp_add_arg()
+    """Print the addition of all arguments."""
+    import sys
+
+    total = 0
+    for i in range(len(sys.argv) - 1):
+        total += int(sys.argv[i + 1])
+    print("{}".format(total))
