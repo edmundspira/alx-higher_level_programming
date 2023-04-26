@@ -1,29 +1,46 @@
 #!/usr/bin/node
+
 const request = require('request');
-const URL = 'https://swapi-api.hbtn.io/api/films/' + process.argv[2];
 
-/* Make the request to the film */
-request.get(URL, (error, response, body) => {
-  if (error) {
-    console.error('error:', error);
-  }
-  const data = JSON.parse(body);
-  /* Call display with the character's arrays */
-  display(data.characters, 0);
-});
-
-/* request to the each character and display */
-function display (person, index) {
-  if (!person[index]) {
-    return;
-  }
-  request.get(person[index], (error, response, body) => {
-    if (error) {
-      console.error('error:', error);
-    }
-    const OneCharacter = JSON.parse(body);
-    console.log(OneCharacter.name);
-    display(person, ++index);
+function getDataFrom (url) {
+  return new Promise(function (resolve, reject) {
+    request(url, function (err, _res, body) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
   });
-  return 0;
 }
+
+function errHandler (err) {
+  console.log(err);
+}
+
+function printMovieCharacters (movieId) {
+  const movieUri = `https://swapi-api.hbtn.io/api/films/${movieId}`;
+
+  getDataFrom(movieUri)
+    .then(JSON.parse, errHandler)
+    .then(function (res) {
+      const characters = res.characters;
+      const promises = [];
+
+      for (let i = 0; i < characters.length; ++i) {
+        promises.push(getDataFrom(characters[i]));
+      }
+
+      Promise.all(promises)
+        .then((results) => {
+          for (let i = 0; i < results.length; ++i) {
+            console.log(JSON.parse(results[i]).name);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+}
+
+printMovieCharacters(process.argv[2]);

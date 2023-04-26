@@ -1,19 +1,14 @@
 #!/usr/bin/node
+
 const request = require('request');
-const URL = 'https://swapi-api.hbtn.io/api/films/' + process.argv[2];
-request.get(URL, (error, response, body) => {
-  if (error) {
-    console.error('error:', error);
-  }
-  const data = JSON.parse(body);
-  data.characters.forEach((char) => {
-    request.get(char, (error1, response1, body1) => {
-      if (error1) {
-        console.error('error:', error1);
-      }
-      const OneCharacter = JSON.parse(body1);
-      console.log(OneCharacter.name);
+const starWarsUri = 'https://swapi-api.hbtn.io/api/films/'.concat(process.argv[2]);
+
+request(starWarsUri, function (_err, _res, body) {
+  const characters = JSON.parse(body).characters;
+
+  for (let i = 0; i < characters.length; ++i) {
+    request(characters[i], function (_cErr, _cRes, cBody) {
+      console.log(JSON.parse(cBody).name);
     });
-    return 0;
-  });
+  }
 });
